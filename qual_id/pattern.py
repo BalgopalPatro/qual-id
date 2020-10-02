@@ -3,6 +3,8 @@ from .categories.animal import Animal
 from .categories.color import Color
 from .categories.country import Country
 from .categories.shape import Shape
+from .categories.film import Film
+from .categories.book import Book
 from .categories.drink import Drink
 from .categories.electronic import Electronic
 from .categories.emotion import Emotion
@@ -13,6 +15,11 @@ from .categories.instrument import Instrument
 from .categories.music import Music
 from .categories.tool import Tool
 from .categories.searchengine import SearchEngine
+from .categories.adjective import Adjective
+from .categories.city import City
+from .categories.planet import Planet
+from .categories.language import Language
+from .categories.vehicle import Vehicle
 
 class Pattern:
   __random_key = "random"
@@ -22,6 +29,8 @@ class Pattern:
       "color": Color(),
       "country": Country(),
       "shape": Shape(),
+      "film": Film(),
+      "book": Book(),
       "drink": Drink(),
       "electronic":Electronic(),
       "emotion": Emotion(),
@@ -31,7 +40,12 @@ class Pattern:
       "instrument": Instrument(),
       "music": Music(),
       "tool": Tool(),
-      "searchengine": SearchEngine()
+      "searchengine": SearchEngine(),
+      "adjective": Adjective(),
+      "city": City(),
+      "planet": Planet(),
+      "language": Language(),
+      "vehicle": Vehicle()
   }
 
   @staticmethod
@@ -39,19 +53,20 @@ class Pattern:
     return list(Pattern.__category_map.keys())
 
   def __init__(self, pattern_string):
-    self.__categories = self.__replace_randoms(pattern_string.split('-'))
+    categories_array = [p for p in pattern_string.split('-') if p != ""]
+    self.__categories = self.__replace_randoms(categories_array)
 
-  def is_valid(self):
-    return self.__categories_length_is_acceptable() and self.__categories_all_exist()
+  def has_acceptable_categories_length(self):
+    return self.__categories_length_is_acceptable()
+
+  def get_nonexistent_categories(self):
+    return [category for category in self.__categories if category not in Pattern.__category_map]
 
   def get_categories(self):
     return [Pattern.__category_map[category] for category in self.__categories]
 
   def __categories_length_is_acceptable(self):
     return (0 < len(self.__categories) < 6)
-
-  def __categories_all_exist(self):
-    return all([(category in Pattern.__category_map) for category in self.__categories])
 
   @staticmethod
   def __random_category():
